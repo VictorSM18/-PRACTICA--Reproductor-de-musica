@@ -15,7 +15,7 @@
     </head>
     <body>
         <main class="main-container">
-            <div class="portrait"></div>
+            <div id="portrait"></div>
             <div class="info">
                 <p class="song-title"></p>
                 <p class="song-author"></p>
@@ -25,20 +25,28 @@
                     <p class="current-time"></p>
                     <p class="duration"></p>
                 </div>
-                <div class="progress-bar">
-                    <audio
-                        src="assets/lost-in-city-lights-145038.mp3"
-                        controls
-                    ></audio>
-                    <audio src="assets/cover-2.png"></audio>
+                <div id="audio">
+                    <audio>
+                        <source
+                            id="audio1"
+                            src="assets/lost-in-city-lights-145038.mp3"
+                            type="audio/mpeg"
+                        />
+                    </audio>
                 </div>
             </div>
             <div class="controls">
-                <div class="back">
+                <div class="previous">
                     <img src="assets/Stop_and_play_fill-1.svg" alt="" />
                 </div>
                 <div class="play-pause">
-                    <img src="assets/Play_fill.svg" alt="" />
+                    <img id="play-icon" src="assets/Play_fill.svg" alt="" />
+                    <img
+                        class="no-display"
+                        id="pause-icon"
+                        src="assets/pause-solid.svg"
+                        alt=""
+                    />
                 </div>
                 <div class="next">
                     <img src="assets/Stop_and_play_fill.svg" alt="" />
