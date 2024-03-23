@@ -7,9 +7,11 @@ const nextButton = document.querySelector(".next");
 const playPauseButton = document.querySelector(".play-pause");
 const playButton = playPauseButton.children[0];
 const pauseButton = playPauseButton.children[1];
-
-let audio = document.querySelector("audio");
+const currentTime = document.querySelector(".current-time");
+const duration = document.querySelector(".duration");
+const audio = document.querySelector("audio");
 const source = audio.children[0];
+const currentProgress = document.getElementById("current-progress");
 
 // Arreglo de objetos con la info de las canciones
 const songs = [
@@ -27,10 +29,15 @@ const songs = [
     },
 ];
 
-currentSong = 0;
+let currentSong = 0;
 let playing = false;
 
 let getSongData = () => {
+    audio.addEventListener("loadedmetadata", () => {
+        let audioDuration = audio.duration;
+        duration.innerHTML = secToMin(audioDuration);
+    });
+
     if (playing === true) {
         playButton.classList.add("no-display");
         pauseButton.classList.remove("no-display");
@@ -41,10 +48,39 @@ let getSongData = () => {
     songPortrait.style.backgroundImage = `url("${songs[currentSong].image}")`;
     source.setAttribute("src", songs[currentSong].url);
     audio.load();
-    audio.play();
 };
 
 getSongData();
+
+let updateTimer = () => {
+    setInterval(() => {
+        let currentTimer = secToMin(audio.currentTime);
+        currentTime.innerHTML = currentTimer;
+
+        let progress = (audio.currentTime * 100) / audio.duration;
+        let progressPercentage = (currentProgress.style.width = progress + "%");
+
+        if (progress >= 100) {
+            currentSong++;
+            playing = true;
+            getSongData();
+            audio.play();
+            return currentSong, playing;
+        }
+    }, 1000);
+};
+
+let secToMin = (seconds) => {
+    let minutes = Math.floor(seconds / 60);
+    let extraSeconds = seconds % 60;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    extraSeconds =
+        extraSeconds < 10
+            ? "0" + Math.floor(extraSeconds)
+            : Math.floor(extraSeconds);
+
+    return minutes + ":" + extraSeconds;
+};
 
 previousButton.addEventListener("click", () => {
     if (currentSong === 0) {
@@ -55,6 +91,7 @@ previousButton.addEventListener("click", () => {
         currentSong--;
         playing = true;
         getSongData();
+        audio.play();
         return currentSong, playing;
     }
 });
@@ -68,6 +105,7 @@ nextButton.addEventListener("click", () => {
         currentSong++;
         playing = true;
         getSongData();
+        audio.play();
         return currentSong, playing;
     }
 });
@@ -80,8 +118,10 @@ playPauseButton.addEventListener("click", () => {
         return (playing = false);
     } else {
         audio.play();
+        playing = true;
         playButton.classList.add("no-display");
         pauseButton.classList.remove("no-display");
-        return (playing = true);
+        updateTimer();
+        return playing;
     }
 });
