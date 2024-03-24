@@ -9,8 +9,9 @@ body {
 .main-container {
     background-color: #121826a6;
     border-radius: 2rem;
-    min-width: 25rem;
+    width: 20rem;
     height: 70%;
+    margin-inline: 2rem;
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
